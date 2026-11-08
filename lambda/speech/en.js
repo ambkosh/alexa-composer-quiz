@@ -15,7 +15,7 @@ const words = {
   // Player counts. Sound-alikes ("to", "for") only count when no real number word was heard.
   counts: { one: 1, solo: 1, single: 1, alone: 1, two: 2, three: 3, four: 4 },
   countSoundAlikes: { won: 1, me: 1, to: 2, too: 2, tree: 3, for: 4, fore: 4 },
-  // Commands that end up in the composer slot while it's being elicited.
+  // Commands Alexa may deliver as a composer answer ("no idea" in the composer slot).
   commands: {
     pass: ['pass', 'skip', 'skip me', 'no idea', "don't know", 'not sure', 'no clue', 'give up', 'next player', 'beats me'],
     hint: ['hint', 'clue', 'help me out'],

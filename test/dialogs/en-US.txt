@@ -1,0 +1,18 @@
+# An English conversation for: npm run alexa -- dialog en-US --file test/dialogs/en-US.txt
+# (needs the en-US language on the skill)
+open composer quiz
+two
+Anna
+my name is Ben
+Mozart
+I think it's Beethoven
+hint
+another hint
+pass
+no idea
+what's the score
+repeat
+skip this song
+Tchaikovsky
+help
+stop

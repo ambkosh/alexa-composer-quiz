@@ -55,20 +55,8 @@ for (const [locale, lang] of Object.entries(LOCALES)) {
     }
   });
 
-  test(`${locale}: dialog model matches the language model slots`, () => {
-    for (const di of model.interactionModel.dialog.intents) {
-      const intent = lm.intents.find((i) => i.name === di.name);
-      assert.ok(intent, `dialog intent ${di.name} missing from language model`);
-      for (const slot of di.slots) {
-        const declared = intent.slots.find((s) => s.name === slot.name);
-        assert.ok(declared, `${di.name}.${slot.name}`);
-        assert.equal(declared.type, slot.type);
-      }
-    }
-    // index.js elicits these slots.
-    for (const [intent, slot] of [['PlayerCountIntent', 'count'], ['PlayerNameIntent', 'name'], ['AnswerIntent', 'composer']]) {
-      assert.ok(model.interactionModel.dialog.intents.some((d) => d.name === intent && d.slots.some((s) => s.name === slot)), intent);
-    }
+  test(`${locale}: has no dialog model (the skill sends no Dialog directives)`, () => {
+    assert.equal(model.interactionModel.dialog, undefined);
   });
 
   test(`${locale}: slot values are plain words`, () => {

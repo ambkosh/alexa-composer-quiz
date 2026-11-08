@@ -1,0 +1,18 @@
+# A German conversation for: npm run alexa -- dialog de-DE --file test/dialogs/de-DE.txt
+# One utterance per line. The songs are random, so the guesses may be right or wrong.
+starte komponisten quiz
+zwei
+Anna
+ich heiße Ben
+Mozart
+ich glaube es ist Beethoven
+Tipp
+noch einen Tipp
+ich passe
+keine Ahnung
+wie ist der Punktestand
+nochmal
+nächstes Stück
+Tschaikowsky
+Hilfe
+stopp

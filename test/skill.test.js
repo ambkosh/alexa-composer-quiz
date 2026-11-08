@@ -110,11 +110,6 @@ function checkSsml(response) {
   for (const src of sources) assert.match(src, /^(https:\/\/|soundbank:\/\/)/);
 }
 
-function elicited(response) {
-  const d = (response.directives || []).find((x) => x.type === 'Dialog.ElicitSlot');
-  return d ? `${d.updatedIntent.name}.${d.slotToElicit}` : null;
-}
-
 async function setUp(names) {
   const s = new Session();
   await s.launch();
@@ -128,7 +123,6 @@ test('launch asks for the number of players', async () => {
   const s = new Session();
   const res = await s.launch();
   assert.match(speech(res), /How many players/);
-  assert.equal(elicited(res), 'PlayerCountIntent.count');
   assert.equal(res.shouldEndSession, false);
   assert.ok(res.reprompt);
 });
@@ -141,7 +135,6 @@ test('player count is validated', async () => {
   assert.equal(s.game.phase, 'SETUP_COUNT');
   const ok = await s.count(2);
   assert.match(speech(ok), /Player one, what's your name/);
-  assert.equal(elicited(ok), 'PlayerNameIntent.name');
 });
 
 test('one-shot launch with a player count', async () => {
@@ -172,7 +165,6 @@ test('a full two-player game', async () => {
   const firstSong = s.game.queue[0];
   assert.match(speech(last), new RegExp(`<audio src="${config.audioBaseUrl}/${firstSong}\\.mp3"/>`));
   assert.match(speech(last), /Anna, who/);
-  assert.equal(elicited(last), 'AnswerIntent.composer');
 
   // Round 1: Anna is wrong, Ben is right.
   const wrong = await s.answer('Mozart-ish', s.wrongId);
@@ -213,7 +205,6 @@ test('a full two-player game', async () => {
   while (s.game.phase === 'PLAYING') res = await s.answer('right', s.answerId);
   assert.match(speech(res), /end of the game/);
   assert.match(speech(res), /play again/);
-  assert.equal(elicited(res), null);
   assert.equal(res.shouldEndSession, false);
 
   const again2 = await s.intent('AMAZON.YesIntent');
@@ -266,7 +257,6 @@ test('help, fallback and stop work in every phase', async () => {
   await s.name('Ben');
   const help = await s.intent('AMAZON.HelpIntent');
   assert.match(speech(help), /say the composer's name/);
-  assert.equal(elicited(help), 'AnswerIntent.composer');
   await s.answer('right', s.answerId);
   const stop = await s.intent('AMAZON.CancelIntent');
   assert.equal(stop.shouldEndSession, true);
@@ -278,7 +268,6 @@ test('start over resets to player selection', async () => {
   const res = await s.intent('AMAZON.StartOverIntent');
   assert.match(speech(res), /start over/);
   assert.equal(s.game.phase, 'SETUP_COUNT');
-  assert.equal(elicited(res), 'PlayerCountIntent.count');
 });
 
 test('session end returns an empty response', async () => {
@@ -382,4 +371,13 @@ test('German speech has the same functions as English', () => {
   assert.deepEqual(Object.keys(de).sort(), Object.keys(en).sort());
   assert.deepEqual(Object.keys(de.words).sort(), Object.keys(en.words).sort());
   assert.deepEqual(Object.keys(de.words.commands).sort(), Object.keys(en.words.commands).sort());
+});
+
+test('responses carry no Dialog directives and keep the session open', async () => {
+  const s = new Session('de-DE');
+  for (const res of [await s.launch(), await s.count(2), await s.name('Anna'), await s.name('Ben')]) {
+    assert.equal((res.directives || []).length, 0);
+    assert.equal(res.shouldEndSession, false);
+    assert.ok(res.reprompt);
+  }
 });

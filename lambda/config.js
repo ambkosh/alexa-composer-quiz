@@ -21,11 +21,6 @@ module.exports = {
   // gets one guess per song, in turn.
   soloGuesses: 2,
 
-  // Ask Alexa to expect a specific slot (player count, name, composer) on the next turn.
-  // This biases speech recognition towards composer names. Set USE_ELICIT_SLOT=false to
-  // fall back to plain intent matching.
-  useElicitSlot: process.env.USE_ELICIT_SLOT !== 'false',
-
   // Sounds from the Alexa Skills Kit sound library.
   sounds: {
     intro: 'soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_intro_01',

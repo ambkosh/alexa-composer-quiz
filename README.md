@@ -90,6 +90,34 @@ reach it by themselves: import the skill again, or copy the changed files into t
 console's **Code** tab and click **Deploy**. The clips are the exception, since they are
 always loaded from GitHub.
 
+### Developing from the command line
+
+After the first import, there's no need to go back to the console's Code and Test tabs.
+`scripts/alexa.mjs` deploys and tests the Alexa-hosted skill with the
+[ASK CLI](https://developer.amazon.com/en-US/docs/alexa/smapi/ask-cli-intro.html):
+
+```sh
+npm install -g ask-cli
+ask configure                       # log in with your Amazon developer account; no AWS account needed
+ask smapi list-skills-for-vendor    # find your skill's ID
+npm run alexa -- setup <skill-id>   # once: checks out the hosted skill's code repo into .alexa/hosted
+```
+
+Then:
+
+```sh
+npm run alexa -- deploy             # push lambda/ and upload the interaction models, wait for the build
+npm run alexa:test                  # play test/dialogs/de-DE.txt against the real Alexa
+npm run alexa -- dialog de-DE "starte komponisten quiz" "zwei" "Anna"
+npm run alexa -- status             # build and deployment status
+```
+
+`dialog` prints what Alexa understood (intent and slot values) and answered for every turn,
+and saves the full requests and responses in `.alexa/last-dialog.json`. The skill's name and
+languages stay as set in the console: models are only uploaded for languages the skill
+has. To add English, add the language in the console (Build → language menu → Language
+settings), then run `npm run alexa -- deploy --models`.
+
 ### Option B: ASK CLI with your own AWS account
 
 ```sh
@@ -159,16 +187,15 @@ Settings in `lambda/config.js`:
 | `maxPlayers` | 4 | maximum number of players |
 | `minRounds` | 8 | minimum rounds per game |
 | `soloGuesses` | 2 | guesses per song in a solo game |
-| `useElicitSlot` | true | ask Alexa to expect a composer name next (see below) |
 
 ### Speech recognition notes
 
-- While a clip is being guessed, the skill sends a `Dialog.ElicitSlot` directive for the
-  composer slot, which biases Alexa's recognition towards composer names. Every phase also
-  accepts answers that Alexa routed to the "wrong" intent (a name heard as a composer, a
-  composer heard as a first name) and fuzzy-matches unresolved words ("tschaikowsky").
-- If you find that Alexa doesn't reprompt a silent player on your device, set
-  `useElicitSlot` to `false` (or `USE_ELICIT_SLOT=false` on Lambda) and compare.
+- Every phase accepts answers that Alexa routed to the "wrong" intent (a name heard as a
+  composer, a composer heard as a first name) and fuzzy-matches unresolved words
+  ("tschaikowsky").
+- The skill doesn't use `Dialog` directives (such as `Dialog.ElicitSlot`): they need a
+  dialog model with required slots, Alexa drops an empty one when the model is built, and
+  a `Dialog.ElicitSlot` without one makes Alexa reject the response.
 - Players have about 8 seconds to answer, then Alexa reprompts once before the session ends.
 
 ## Credits

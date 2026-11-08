@@ -37,14 +37,6 @@ function clipUrl(song) {
   return song.url || `${config.audioBaseUrl.replace(/\/+$/, '')}/${encodeURIComponent(song.id)}.mp3`;
 }
 
-// The slot Alexa should expect next, per phase. Eliciting it biases speech recognition
-// towards that slot's values (e.g. composer names while a clip is being guessed).
-const EXPECTED_SLOT = {
-  [PHASE.SETUP_COUNT]: { intent: 'PlayerCountIntent', slot: 'count' },
-  [PHASE.SETUP_NAMES]: { intent: 'PlayerNameIntent', slot: 'name' },
-  [PHASE.PLAYING]: { intent: 'AnswerIntent', slot: 'composer' },
-};
-
 function defaultReprompt(h, state) {
   switch (state.phase) {
     case PHASE.SETUP_COUNT: return say(h).askPlayerCount();
@@ -57,17 +49,7 @@ function defaultReprompt(h, state) {
 /** Speak and keep the session open, waiting for the next answer. */
 function ask(h, state, text, reprompt = defaultReprompt(h, state)) {
   saveState(h, state);
-  const rb = h.responseBuilder.speak(text).reprompt(reprompt);
-  const expected = EXPECTED_SLOT[state.phase];
-  const type = Alexa.getRequestType(h.requestEnvelope);
-  if (config.useElicitSlot && expected && (type === 'IntentRequest' || type === 'LaunchRequest')) {
-    rb.addElicitSlotDirective(expected.slot, {
-      name: expected.intent,
-      confirmationStatus: 'NONE',
-      slots: { [expected.slot]: { name: expected.slot, confirmationStatus: 'NONE' } },
-    });
-  }
-  return rb.getResponse();
+  return h.responseBuilder.speak(text).reprompt(reprompt).getResponse();
 }
 
 /** Speak and end the session. */
@@ -115,7 +97,7 @@ function parseCount(raw, words) {
 }
 
 // Words that mean something other than a composer when Alexa forces them into the
-// composer slot (which happens while that slot is being elicited).
+// composer slot (e.g. "no idea" heard as an answer).
 function detectCommand(raw, words) {
   const padded = ` ${normalize(raw)} `;
   for (const [cmd, phrases] of words.commands) {
