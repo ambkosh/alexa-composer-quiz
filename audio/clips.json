@@ -1,0 +1,442 @@
+{
+  "bach-air": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Air - Air Force Strings - United States Air Force Band.mp3",
+    "page": "https://commons.wikimedia.org/wiki/File:Air_-_Air_Force_Strings_-_United_States_Air_Force_Band.mp3",
+    "license": "Public domain",
+    "artist": "Composition: Johann Sebastian Bach; Performance: United States Air Force Band, Air Force Strings; Recording: United States Air Force"
+  },
+  "bach-toccata": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Toccata et Fugue BWV565.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Toccata_et_Fugue_BWV565.ogg",
+    "license": "Public domain",
+    "artist": "Johann Sebastian Bach (disputed), performed by Ashtar Moïra"
+  },
+  "bach-badinerie": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Bach, Johann Sebastian - Suite No.2 in B Minor - X. Badinerie.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Bach,_Johann_Sebastian_-_Suite_No.2_in_B_Minor_-_X._Badinerie.ogg",
+    "license": "CC0",
+    "artist": "European Archive"
+  },
+  "bach-jesu-joy": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Bach, BWV 147, 10. Jesus bleibet meine Freude.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Bach,_BWV_147,_10._Jesus_bleibet_meine_Freude.ogg",
+    "license": "CC0",
+    "artist": "Orchestra Gli Armonici"
+  },
+  "bach-prelude-c": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "JS Bach - Well Tempered Clavier - Prelude in Fugue No.1 in C major.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:JS_Bach_-_Well_Tempered_Clavier_-_Prelude_in_Fugue_No.1_in_C_major.ogg",
+    "license": "CC0",
+    "artist": "Johann Sebastian Bach (1685-1750) (see Musopen for performance author information)"
+  },
+  "handel-hallelujah": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Handel Messiah Hallelujah by Oratorio Chorus.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Handel_Messiah_Hallelujah_by_Oratorio_Chorus.ogg",
+    "license": "Public domain",
+    "artist": "G. F. Handel"
+  },
+  "handel-hornpipe": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Handel's Water Music - 12. Alla hornpipe - Chamber Orchestra - United States Marine Band.opus",
+    "page": "https://commons.wikimedia.org/wiki/File:Handel%27s_Water_Music_-_12._Alla_hornpipe_-_Chamber_Orchestra_-_United_States_Marine_Band.opus",
+    "license": "Public domain",
+    "artist": ""
+  },
+  "vivaldi-spring": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "The Modena Chamber Orchestra - Vivaldi's Spring, RV 269 - I. Allegro.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:The_Modena_Chamber_Orchestra_-_Vivaldi%27s_Spring,_RV_269_-_I._Allegro.ogg",
+    "license": "PDM-owner",
+    "artist": "The Modena Chamber Orchestra"
+  },
+  "vivaldi-summer": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "The Modena Chamber Orchestra - Vivaldi's Summer, RV 315 - III. Presto.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:The_Modena_Chamber_Orchestra_-_Vivaldi%27s_Summer,_RV_315_-_III._Presto.ogg",
+    "license": "PDM-owner",
+    "artist": "The Modena Chamber Orchestra"
+  },
+  "vivaldi-winter": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "The Modena Chamber Orchestra - Vivaldi's Winter, RV 297 - I. Allegro non molto.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:The_Modena_Chamber_Orchestra_-_Vivaldi%27s_Winter,_RV_297_-_I._Allegro_non_molto.ogg",
+    "license": "PDM-owner",
+    "artist": "The Modena Chamber Orchestra"
+  },
+  "pachelbel-canon": {
+    "start": 10,
+    "duration": 30,
+    "source": "Canon (2004) - Strolling Strings - United States Air Force Band.mp3",
+    "page": "https://commons.wikimedia.org/wiki/File:Canon_(2004)_-_Strolling_Strings_-_United_States_Air_Force_Band.mp3",
+    "license": "Public domain",
+    "artist": "Composition: Johann Pachelbel; Arrangement: Frank Hudson; Performance: United States Air Force Band, Strolling Strings; Recording: United States Air Force"
+  },
+  "haydn-surprise": {
+    "start": 0,
+    "duration": 40.1,
+    "source": "Haydn; Symphony No. 94 \"Surprise\", 2. Andante.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Haydn;_Symphony_No._94_%22Surprise%22,_2._Andante.ogg",
+    "license": "Public domain",
+    "artist": "Boston Symphony Orchestra Serge Koussevitzky"
+  },
+  "haydn-lark": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Haydn - String Quartet, Op. 64 No. 5 in D major 'The Lark' - I. Allegro moderato (Musopen String Quartet).flac",
+    "page": "https://commons.wikimedia.org/wiki/File:Haydn_-_String_Quartet,_Op._64_No._5_in_D_major_%27The_Lark%27_-_I._Allegro_moderato_(Musopen_String_Quartet).flac",
+    "license": "Public domain",
+    "artist": "Joseph Haydn"
+  },
+  "mozart-nachtmusik": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Mozart K525 Serenade in G Major 1 - Allegro.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Mozart_K525_Serenade_in_G_Major_1_-_Allegro.ogg",
+    "license": "Public domain",
+    "artist": "Wolfgang Amadeus Mozart (1756–1791). The website lists the \"performer\" as the European Archive, which does not make sense (the link goes to https://musopen.org/music/performer/european-archive/ )"
+  },
+  "mozart-symphony-40": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Mozart - Symphony No. 40 in G minor, K550 - I. Molto allegro (Musopen Symphony).flac",
+    "page": "https://commons.wikimedia.org/wiki/File:Mozart_-_Symphony_No._40_in_G_minor,_K550_-_I._Molto_allegro_(Musopen_Symphony).flac",
+    "license": "Public domain",
+    "artist": "Wolfgang Amadeus Mozart"
+  },
+  "mozart-figaro": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Mozart - Le nozze di Figaro, K492 - Overture (Musopen Symphony).flac",
+    "page": "https://commons.wikimedia.org/wiki/File:Mozart_-_Le_nozze_di_Figaro,_K492_-_Overture_(Musopen_Symphony).flac",
+    "license": "Public domain",
+    "artist": "Wolfgang Amadeus Mozart"
+  },
+  "mozart-turkish-march": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Rondo Alla Turka.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Rondo_Alla_Turka.ogg",
+    "license": "Public domain",
+    "artist": "Wolfgang Amadeus Mozart"
+  },
+  "beethoven-5": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Ludwig van Beethoven - symphony no. 5 in c minor, op. 67 - i. allegro con brio.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Ludwig_van_Beethoven_-_symphony_no._5_in_c_minor,_op._67_-_i._allegro_con_brio.ogg",
+    "license": "Public domain",
+    "artist": "Ludwig van Beethoven"
+  },
+  "beethoven-moonlight": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Ludwig van Beethoven - sonata no. 14 in c sharp minor 'moonlight', op. 27 no. 2 - i. adagio sostenuto.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Ludwig_van_Beethoven_-_sonata_no._14_in_c_sharp_minor_%27moonlight%27,_op._27_no._2_-_i._adagio_sostenuto.ogg",
+    "license": "Public domain",
+    "artist": "Ludwig van Beethoven"
+  },
+  "beethoven-fur-elise": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "FurElise.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:FurElise.ogg",
+    "license": "Public domain",
+    "artist": "Ludwig van Beethoven"
+  },
+  "beethoven-pastoral": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Ludwig van Beethoven - symphony no. 6 in f major 'pastoral', op. 68 - i. allegro non troppo.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Ludwig_van_Beethoven_-_symphony_no._6_in_f_major_%27pastoral%27,_op._68_-_i._allegro_non_troppo.ogg",
+    "license": "Public domain",
+    "artist": "Ludwig van Beethoven"
+  },
+  "rossini-william-tell": {
+    "start": 591,
+    "duration": 25.1,
+    "source": "Gioachino Rossini, William Tell Overture (military band version, 2000).ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gioachino_Rossini,_William_Tell_Overture_(military_band_version,_2000).ogg",
+    "license": "Public domain",
+    "artist": "Gioachino Rossini, transcribed by Wenzel Sedlak; performed by the United States Marine Corps Band (director: Timothy Foley)."
+  },
+  "mendelssohn-wedding-march": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "A Midsummer Night's Dream Op. 61 Wedding March (Mendelssohn) European Archive.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:A_Midsummer_Night%27s_Dream_Op._61_Wedding_March_(Mendelssohn)_European_Archive.ogg",
+    "license": "Public domain",
+    "artist": "European Archive"
+  },
+  "mendelssohn-hebrides": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Mendelssohn - Hebrides Overture, Op. 26 (Musopen Symphony).flac",
+    "page": "https://commons.wikimedia.org/wiki/File:Mendelssohn_-_Hebrides_Overture,_Op._26_(Musopen_Symphony).flac",
+    "license": "Public domain",
+    "artist": "Felix Mendelssohn"
+  },
+  "chopin-nocturne-9-2": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Chopin Nocturne No. 2 in E Flat Major, Op. 9.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Chopin_Nocturne_No._2_in_E_Flat_Major,_Op._9.ogg",
+    "license": "CC0",
+    "artist": "Peter Johnston"
+  },
+  "chopin-minute-waltz": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Waltz Op. 64 no. 1 in D flat major.mp3",
+    "page": "https://commons.wikimedia.org/wiki/File:Waltz_Op._64_no._1_in_D_flat_major.mp3",
+    "license": "CC0",
+    "artist": "Frederic Chopin"
+  },
+  "chopin-funeral-march": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Chopin Pitman sonata no 2 in b flat minor funeral march III marche funebre lento.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Chopin_Pitman_sonata_no_2_in_b_flat_minor_funeral_march_III_marche_funebre_lento.ogg",
+    "license": "Public Domain",
+    "artist": "Composer: Frédéric Chopin; Performer: Paul Pitman"
+  },
+  "chopin-heroic-polonaise": {
+    "start": 0,
+    "duration": 30,
+    "source": "PolonaiseOp.53InAFlatMajorheroic.mp3",
+    "page": "https://commons.wikimedia.org/wiki/File:PolonaiseOp.53InAFlatMajorheroic.mp3",
+    "license": "CC0",
+    "artist": "Frederic Chopin"
+  },
+  "schumann-traumerei": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Robert Schumann - scenes from childhood, op. 15 - vii. dreaming.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Robert_Schumann_-_scenes_from_childhood,_op._15_-_vii._dreaming.ogg",
+    "license": "Public domain",
+    "artist": "Robert Schumann (1810-1856) (see Musopen for performance author information)"
+  },
+  "liszt-rhapsody-2": {
+    "start": 440.5,
+    "duration": 25.1,
+    "source": "Hungarian Rhapsody No 2.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Hungarian_Rhapsody_No_2.ogg",
+    "license": "Public domain",
+    "artist": "Franz Liszt"
+  },
+  "wagner-valkyries": {
+    "start": 0,
+    "duration": 30,
+    "source": "Richard Wagner - Ride of the Valkyries.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Richard_Wagner_-_Ride_of_the_Valkyries.ogg",
+    "license": "Public domain",
+    "artist": "Richard Wagner (1813–1883)"
+  },
+  "verdi-anvil-chorus": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Giuseppe Verdi - Anvil Chorus.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Giuseppe_Verdi_-_Anvil_Chorus.ogg",
+    "license": "CC0",
+    "artist": "Musopen"
+  },
+  "verdi-aida-march": {
+    "start": 0,
+    "duration": 30,
+    "source": "Triumphal March from Aida.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Triumphal_March_from_Aida.ogg",
+    "license": "Public domain",
+    "artist": "Giuseppe Verdi, performed by the w:United States Marine Corps Band , Timothy Foley, Director"
+  },
+  "strauss-blue-danube": {
+    "start": 0,
+    "duration": 40.1,
+    "source": "Strauss, An der schönen blauen Donau.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Strauss,_An_der_sch%C3%B6nen_blauen_Donau.ogg",
+    "license": "CC0",
+    "artist": "European Archive"
+  },
+  "offenbach-can-can": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Offenbach - Orpheus in the Underworld - Overture, Can Can section.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Offenbach_-_Orpheus_in_the_Underworld_-_Overture,_Can_Can_section.ogg",
+    "license": "Public Domain",
+    "artist": "Musopen"
+  },
+  "brahms-hungarian-dance-1": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Hungarian Dance No. 1 - Strolling Strings - United States Air Force Band.mp3",
+    "page": "https://commons.wikimedia.org/wiki/File:Hungarian_Dance_No._1_-_Strolling_Strings_-_United_States_Air_Force_Band.mp3",
+    "license": "Public domain",
+    "artist": "Johannes Brahms"
+  },
+  "bizet-carmen-prelude": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Carmen - Prelude to Act 1.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Carmen_-_Prelude_to_Act_1.ogg",
+    "license": "CC0",
+    "artist": "Musopen"
+  },
+  "saint-saens-swan": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "20091104 Alisa Weilerstein and Jason Yoder - Saint Saëns' The Swan.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:20091104_Alisa_Weilerstein_and_Jason_Yoder_-_Saint_Sa%C3%ABns%27_The_Swan.ogg",
+    "license": "Public domain",
+    "artist": "Camille Saint-Saëns , Whitehouse.gov"
+  },
+  "saint-saens-danse-macabre": {
+    "start": 10,
+    "duration": 30,
+    "source": "PhiladelphiaSymphonyOrchestra-DanseMacabre.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:PhiladelphiaSymphonyOrchestra-DanseMacabre.ogg",
+    "license": "Public domain",
+    "artist": "Philadelphia Symphony Orchestra, Stokowski, Victor 6505"
+  },
+  "mussorgsky-bald-mountain": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Modest Mussorgsky - night on bald mountain.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Modest_Mussorgsky_-_night_on_bald_mountain.ogg",
+    "license": "Public domain",
+    "artist": "Modest Petrovich Mussorgsky"
+  },
+  "mussorgsky-promenade": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Modest Mussorgsky - pictures at an exhibition - promenade - allegro giusto, nel modo russico senza allegrezza, ma.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Modest_Mussorgsky_-_pictures_at_an_exhibition_-_promenade_-_allegro_giusto,_nel_modo_russico_senza_allegrezza,_ma.ogg",
+    "license": "Public domain",
+    "artist": "Composer: Modest Mussorgsky (see Musopen for performance author information)"
+  },
+  "mussorgsky-great-gate": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Modest Mussorgsky - pictures at an exhibition - x. la grande porte de kiev - allegro alla breve. maestoso. con grandezza.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Modest_Mussorgsky_-_pictures_at_an_exhibition_-_x._la_grande_porte_de_kiev_-_allegro_alla_breve._maestoso._con_grandezza.ogg",
+    "license": "Public domain",
+    "artist": "Modest Petrovich Mussorgsky"
+  },
+  "tchaikovsky-swan-lake": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Tchaikovsky Swan Lake Op.20 No.10. Scène.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tchaikovsky_Swan_Lake_Op.20_No.10._Sc%C3%A8ne.ogg",
+    "license": "Public domain",
+    "artist": "Pyotr Ilyich Tchaikovsky"
+  },
+  "tchaikovsky-1812": {
+    "start": 948,
+    "duration": 25.1,
+    "source": "Pyotr Ilyich Tchaikovsky - 1812 overture.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pyotr_Ilyich_Tchaikovsky_-_1812_overture.ogg",
+    "license": "Public domain",
+    "artist": "Music: Pyotr Ilyich Tchaikovsky (1840 – 1893) Recording: Skidmore College Orchestra"
+  },
+  "dvorak-new-world": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Antonin Dvorak - symphony no. 9 in e minor 'from the new world', op. 95 - iv. allegro con fuoco.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Antonin_Dvorak_-_symphony_no._9_in_e_minor_%27from_the_new_world%27,_op._95_-_iv._allegro_con_fuoco.ogg",
+    "license": "Public domain",
+    "artist": "Antonin Dvorak (composer)"
+  },
+  "grieg-morning-mood": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Grieg - Peer Gynt Suite No. 1, Op. 46 - I. Morning Mood (Musopen Symphony).flac",
+    "page": "https://commons.wikimedia.org/wiki/File:Grieg_-_Peer_Gynt_Suite_No._1,_Op._46_-_I._Morning_Mood_(Musopen_Symphony).flac",
+    "license": "Public domain",
+    "artist": "Edvard Grieg"
+  },
+  "grieg-mountain-king": {
+    "start": 102,
+    "duration": 25.1,
+    "source": "Grieg - Peer Gynt Suite No. 1, Op. 46 - IV. In the Hall of the Mountain King (Musopen Symphony).flac",
+    "page": "https://commons.wikimedia.org/wiki/File:Grieg_-_Peer_Gynt_Suite_No._1,_Op._46_-_IV._In_the_Hall_of_the_Mountain_King_(Musopen_Symphony).flac",
+    "license": "Public domain",
+    "artist": "Edvard Grieg"
+  },
+  "grieg-piano-concerto": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Edvard Grieg - piano concerto in a minor, op. 16 - i. allegro molto moderato.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edvard_Grieg_-_piano_concerto_in_a_minor,_op._16_-_i._allegro_molto_moderato.ogg",
+    "license": "Public domain",
+    "artist": "Edvard Grieg"
+  },
+  "smetana-moldau": {
+    "start": 55,
+    "duration": 35.1,
+    "source": "Smetana - Má Vlast - Vltava (Musopen Symphony).flac",
+    "page": "https://commons.wikimedia.org/wiki/File:Smetana_-_M%C3%A1_Vlast_-_Vltava_(Musopen_Symphony).flac",
+    "license": "Public domain",
+    "artist": "Bedřich Smetana"
+  },
+  "rimsky-korsakov-scheherazade": {
+    "start": 0,
+    "duration": 35.1,
+    "source": "Rimsky-Korsakov. Scheherazade, Symphonic Suite, Op. 35 - 01 The Sea And Sinbads Ship.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Rimsky-Korsakov._Scheherazade,_Symphonic_Suite,_Op._35_-_01_The_Sea_And_Sinbads_Ship.ogg",
+    "license": "CC0",
+    "artist": "Nikolai Rimsky-Korsakov"
+  },
+  "elgar-pomp-and-circumstance": {
+    "start": 309.5,
+    "duration": 25.1,
+    "source": "ELGAR Pomp and Circumstance in D, Opus 39, No. 1 - United States Marine Band.mp3",
+    "page": "https://commons.wikimedia.org/wiki/File:ELGAR_Pomp_and_Circumstance_in_D,_Opus_39,_No._1_-_United_States_Marine_Band.mp3",
+    "license": "Public domain",
+    "artist": "United States Marine Band"
+  },
+  "debussy-clair-de-lune": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Clair de lune (Claude Debussy) Suite bergamasque.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Clair_de_lune_(Claude_Debussy)_Suite_bergamasque.ogg",
+    "license": "Public domain",
+    "artist": "Claude Debussy"
+  },
+  "satie-gymnopedie-1": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Erik Satie - gymnopedies - la 1 ere. lent et douloureux.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Erik_Satie_-_gymnopedies_-_la_1_ere._lent_et_douloureux.ogg",
+    "license": "Public domain",
+    "artist": "Robin Alciatore"
+  },
+  "holst-jupiter": {
+    "start": 0,
+    "duration": 25.1,
+    "source": "Holst The Planets Jupiter.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Holst_The_Planets_Jupiter.ogg",
+    "license": "Public domain",
+    "artist": "Performance: United States Air Force Band Composition: Gustav Holst"
+  },
+  "rachmaninoff-piano-concerto-2": {
+    "start": 0,
+    "duration": 35.1,
+    "source": "Sergei Rachmaninoff - piano concerto no. 2 in c minor, op. 18 - i. moderato.ogg",
+    "page": "https://commons.wikimedia.org/wiki/File:Sergei_Rachmaninoff_-_piano_concerto_no._2_in_c_minor,_op._18_-_i._moderato.ogg",
+    "license": "Public domain",
+    "artist": "Sergei Rachmaninoff"
+  }
+}

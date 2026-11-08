@@ -1,0 +1,42 @@
+{
+  "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "en-US": {
+          "name": "Composer Quiz",
+          "summary": "A guess-the-composer party game for up to four players.",
+          "description": "Composer Quiz plays short clips of famous classical music, and you and up to three friends take turns naming the composer. Each round a different player guesses first; if they're wrong, the next player gets a try. Every correct answer earns a point, and the player with the most points at the end wins.\n\nStuck? Ask for a hint, say repeat to hear the clip again, or pass to the next player. Ask \"what's the score?\" at any time.\n\nAll recordings are public domain or CC0 recordings from Wikimedia Commons.",
+          "examplePhrases": [
+            "Alexa, open composer quiz",
+            "Alexa, ask composer quiz to start a game with three players",
+            "Alexa, launch composer quiz"
+          ],
+          "keywords": [
+            "classical music",
+            "composer",
+            "quiz",
+            "music game",
+            "trivia",
+            "party game",
+            "multiplayer"
+          ]
+        }
+      },
+      "isAvailableWorldwide": true,
+      "testingInstructions": "Say 'open composer quiz', give a player count (1-4) and player names. Each round plays a short clip; answer with a composer's name (e.g. 'Beethoven'). You can also say 'pass', 'hint', 'repeat', 'skip this song' or 'what's the score'.",
+      "category": "KNOWLEDGE_AND_TRIVIA",
+      "distributionCountries": []
+    },
+    "apis": {
+      "custom": {}
+    },
+    "manifestVersion": "1.0",
+    "privacyAndCompliance": {
+      "allowsPurchases": false,
+      "usesPersonalInfo": false,
+      "isChildDirected": false,
+      "isExportCompliant": true,
+      "containsAds": false
+    }
+  }
+}

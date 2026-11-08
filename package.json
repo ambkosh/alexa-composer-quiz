@@ -1,0 +1,13 @@
+{
+  "name": "alexa-composer-quiz",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Alexa skill: a guess-the-composer party game for up to four players.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "build:model": "node scripts/build-model.mjs",
+    "build:clips": "node scripts/build-clips.mjs",
+    "check": "node scripts/build-model.mjs --check && npm test"
+  }
+}
