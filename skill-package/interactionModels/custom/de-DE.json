@@ -1,0 +1,919 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "komponisten quiz",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": [
+            "wie spielt man das",
+            "was sind die Regeln",
+            "wie funktioniert das",
+            "erklär mir die Regeln"
+          ]
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": [
+            "beende das Spiel",
+            "Spiel beenden",
+            "ich bin fertig",
+            "ich will aufhören"
+          ]
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.YesIntent",
+          "samples": [
+            "nochmal spielen",
+            "lass uns nochmal spielen",
+            "noch ein Spiel",
+            "noch eine Runde",
+            "ja bitte",
+            "ja gerne",
+            "gerne",
+            "klar"
+          ]
+        },
+        {
+          "name": "AMAZON.NoIntent",
+          "samples": [
+            "nein danke",
+            "nicht jetzt",
+            "das reicht",
+            "genug für heute"
+          ]
+        },
+        {
+          "name": "AMAZON.RepeatIntent",
+          "samples": [
+            "spiel es nochmal",
+            "spiel das nochmal",
+            "spiel das Stück nochmal",
+            "nochmal",
+            "noch mal bitte",
+            "nochmal hören",
+            "kann ich es nochmal hören",
+            "wiederhole das Stück",
+            "noch einmal abspielen"
+          ]
+        },
+        {
+          "name": "AMAZON.NextIntent",
+          "samples": [
+            "nächstes Stück",
+            "nächstes Lied",
+            "überspring das Stück",
+            "überspring das Lied",
+            "Stück überspringen",
+            "Lied überspringen",
+            "neues Stück",
+            "anderes Stück"
+          ]
+        },
+        {
+          "name": "AMAZON.StartOverIntent",
+          "samples": [
+            "neues Spiel",
+            "starte ein neues Spiel",
+            "Spiel neu starten",
+            "von vorne mit neuen Spielern"
+          ]
+        },
+        {
+          "name": "PlayerCountIntent",
+          "slots": [
+            {
+              "name": "count",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "{count}",
+            "{count} Spieler",
+            "{count} Personen",
+            "{count} Leute",
+            "wir sind {count}",
+            "wir sind {count} Spieler",
+            "wir sind {count} Personen",
+            "wir haben {count} Spieler",
+            "es gibt {count} Spieler",
+            "es spielen {count}",
+            "es spielen {count} Spieler",
+            "mit {count} Spielern",
+            "für {count} Spieler",
+            "starte ein Spiel mit {count} Spielern",
+            "spiele mit {count} Spielern",
+            "ein Spiel mit {count} Spielern",
+            "ein Spiel für {count} Spieler"
+          ]
+        },
+        {
+          "name": "PlayerNameIntent",
+          "slots": [
+            {
+              "name": "name",
+              "type": "AMAZON.FirstName"
+            }
+          ],
+          "samples": [
+            "{name}",
+            "ich heiße {name}",
+            "ich bin {name}",
+            "ich bin der {name}",
+            "ich bin die {name}",
+            "mein Name ist {name}",
+            "nenn mich {name}",
+            "hier spricht {name}",
+            "man nennt mich {name}",
+            "der Name ist {name}"
+          ]
+        },
+        {
+          "name": "AnswerIntent",
+          "slots": [
+            {
+              "name": "composer",
+              "type": "COMPOSER"
+            }
+          ],
+          "samples": [
+            "{composer}",
+            "ist es {composer}",
+            "es ist {composer}",
+            "war es {composer}",
+            "es war {composer}",
+            "das ist {composer}",
+            "das war {composer}",
+            "ist das {composer}",
+            "ich glaube {composer}",
+            "ich glaube es ist {composer}",
+            "ich glaube das ist {composer}",
+            "ich denke {composer}",
+            "ich denke es ist {composer}",
+            "ich tippe auf {composer}",
+            "ich rate {composer}",
+            "ich sage {composer}",
+            "meine Antwort ist {composer}",
+            "die Antwort ist {composer}",
+            "der Komponist ist {composer}",
+            "der Komponist war {composer}",
+            "vielleicht {composer}",
+            "wahrscheinlich {composer}",
+            "bestimmt {composer}",
+            "das klingt nach {composer}",
+            "klingt nach {composer}",
+            "von {composer}",
+            "das ist von {composer}",
+            "das Stück ist von {composer}",
+            "komponiert von {composer}"
+          ]
+        },
+        {
+          "name": "PassIntent",
+          "slots": [],
+          "samples": [
+            "passe",
+            "ich passe",
+            "pass",
+            "ich setze aus",
+            "überspring mich",
+            "nächster Spieler",
+            "ich weiß es nicht",
+            "weiß ich nicht",
+            "keine Ahnung",
+            "ich habe keine Ahnung",
+            "nicht sicher",
+            "ich bin mir nicht sicher",
+            "ich gebe auf",
+            "keinen Plan",
+            "keine Idee",
+            "mir fällt nichts ein"
+          ]
+        },
+        {
+          "name": "HintIntent",
+          "slots": [],
+          "samples": [
+            "Tipp",
+            "einen Tipp",
+            "gib mir einen Tipp",
+            "gib uns einen Tipp",
+            "kann ich einen Tipp haben",
+            "ich brauche einen Tipp",
+            "Tipp bitte",
+            "einen Tipp bitte",
+            "Hinweis",
+            "gib mir einen Hinweis",
+            "noch einen Tipp",
+            "hast du einen Tipp"
+          ]
+        },
+        {
+          "name": "ScoreIntent",
+          "slots": [],
+          "samples": [
+            "Punktestand",
+            "der Punktestand",
+            "wie ist der Punktestand",
+            "sag mir den Punktestand",
+            "Spielstand",
+            "wie ist der Spielstand",
+            "wie steht es",
+            "wer führt",
+            "wer gewinnt",
+            "wer liegt vorne",
+            "wie viele Punkte habe ich",
+            "wie viele Punkte haben wir",
+            "Punkte",
+            "Rangliste"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "name": "COMPOSER",
+          "values": [
+            {
+              "id": "bach",
+              "name": {
+                "value": "Bach",
+                "synonyms": [
+                  "Johann Sebastian Bach",
+                  "Sebastian Bach"
+                ]
+              }
+            },
+            {
+              "id": "handel",
+              "name": {
+                "value": "Händel",
+                "synonyms": [
+                  "Georg Friedrich Händel",
+                  "Handel",
+                  "Haendel",
+                  "Georg Friedrich Haendel"
+                ]
+              }
+            },
+            {
+              "id": "vivaldi",
+              "name": {
+                "value": "Vivaldi",
+                "synonyms": [
+                  "Antonio Vivaldi"
+                ]
+              }
+            },
+            {
+              "id": "pachelbel",
+              "name": {
+                "value": "Pachelbel",
+                "synonyms": [
+                  "Johann Pachelbel"
+                ]
+              }
+            },
+            {
+              "id": "haydn",
+              "name": {
+                "value": "Haydn",
+                "synonyms": [
+                  "Joseph Haydn",
+                  "Josef Haydn",
+                  "Franz Joseph Haydn",
+                  "Haiden"
+                ]
+              }
+            },
+            {
+              "id": "mozart",
+              "name": {
+                "value": "Mozart",
+                "synonyms": [
+                  "Wolfgang Amadeus Mozart",
+                  "Amadeus",
+                  "Amadeus Mozart"
+                ]
+              }
+            },
+            {
+              "id": "beethoven",
+              "name": {
+                "value": "Beethoven",
+                "synonyms": [
+                  "Ludwig van Beethoven",
+                  "Ludwig von Beethoven",
+                  "Ludwig Beethoven"
+                ]
+              }
+            },
+            {
+              "id": "schubert",
+              "name": {
+                "value": "Schubert",
+                "synonyms": [
+                  "Franz Schubert"
+                ]
+              }
+            },
+            {
+              "id": "rossini",
+              "name": {
+                "value": "Rossini",
+                "synonyms": [
+                  "Gioachino Rossini"
+                ]
+              }
+            },
+            {
+              "id": "mendelssohn",
+              "name": {
+                "value": "Mendelssohn",
+                "synonyms": [
+                  "Felix Mendelssohn Bartholdy",
+                  "Mendelssohn Bartholdy",
+                  "Felix Mendelssohn"
+                ]
+              }
+            },
+            {
+              "id": "chopin",
+              "name": {
+                "value": "Chopin",
+                "synonyms": [
+                  "Frederic Chopin"
+                ]
+              }
+            },
+            {
+              "id": "schumann",
+              "name": {
+                "value": "Schumann",
+                "synonyms": [
+                  "Robert Schumann"
+                ]
+              }
+            },
+            {
+              "id": "liszt",
+              "name": {
+                "value": "Liszt",
+                "synonyms": [
+                  "Franz Liszt",
+                  "List",
+                  "Franz List"
+                ]
+              }
+            },
+            {
+              "id": "wagner",
+              "name": {
+                "value": "Wagner",
+                "synonyms": [
+                  "Richard Wagner"
+                ]
+              }
+            },
+            {
+              "id": "verdi",
+              "name": {
+                "value": "Verdi",
+                "synonyms": [
+                  "Giuseppe Verdi"
+                ]
+              }
+            },
+            {
+              "id": "strauss",
+              "name": {
+                "value": "Strauss",
+                "synonyms": [
+                  "Johann Strauss Sohn",
+                  "Strauß",
+                  "Johann Strauß",
+                  "Johann Strauss",
+                  "Strauss Sohn",
+                  "Johann Strauß Sohn"
+                ]
+              }
+            },
+            {
+              "id": "offenbach",
+              "name": {
+                "value": "Offenbach",
+                "synonyms": [
+                  "Jacques Offenbach"
+                ]
+              }
+            },
+            {
+              "id": "brahms",
+              "name": {
+                "value": "Brahms",
+                "synonyms": [
+                  "Johannes Brahms"
+                ]
+              }
+            },
+            {
+              "id": "bizet",
+              "name": {
+                "value": "Bizet",
+                "synonyms": [
+                  "Georges Bizet"
+                ]
+              }
+            },
+            {
+              "id": "saint_saens",
+              "name": {
+                "value": "Saint Saens",
+                "synonyms": [
+                  "Camille Saint Saens"
+                ]
+              }
+            },
+            {
+              "id": "mussorgsky",
+              "name": {
+                "value": "Mussorgski",
+                "synonyms": [
+                  "Modest Mussorgski",
+                  "Mussorgsky",
+                  "Modest Mussorgsky",
+                  "Mussorski"
+                ]
+              }
+            },
+            {
+              "id": "tchaikovsky",
+              "name": {
+                "value": "Tschaikowsky",
+                "synonyms": [
+                  "Pjotr Iljitsch Tschaikowsky",
+                  "Tchaikovsky",
+                  "Tschaikowski",
+                  "Peter Tschaikowsky",
+                  "Pjotr Tschaikowsky",
+                  "Peter Iljitsch Tschaikowsky"
+                ]
+              }
+            },
+            {
+              "id": "dvorak",
+              "name": {
+                "value": "Dvorak",
+                "synonyms": [
+                  "Antonin Dvorak",
+                  "Dworak",
+                  "Dworschak",
+                  "Dvorschak"
+                ]
+              }
+            },
+            {
+              "id": "grieg",
+              "name": {
+                "value": "Grieg",
+                "synonyms": [
+                  "Edvard Grieg"
+                ]
+              }
+            },
+            {
+              "id": "smetana",
+              "name": {
+                "value": "Smetana",
+                "synonyms": [
+                  "Bedrich Smetana"
+                ]
+              }
+            },
+            {
+              "id": "rimsky_korsakov",
+              "name": {
+                "value": "Rimski Korsakow",
+                "synonyms": [
+                  "Nikolai Rimski Korsakow",
+                  "Rimsky Korsakov",
+                  "Rimsky Korsakow",
+                  "Korsakow",
+                  "Rimski"
+                ]
+              }
+            },
+            {
+              "id": "elgar",
+              "name": {
+                "value": "Elgar",
+                "synonyms": [
+                  "Edward Elgar"
+                ]
+              }
+            },
+            {
+              "id": "debussy",
+              "name": {
+                "value": "Debussy",
+                "synonyms": [
+                  "Claude Debussy"
+                ]
+              }
+            },
+            {
+              "id": "satie",
+              "name": {
+                "value": "Satie",
+                "synonyms": [
+                  "Erik Satie"
+                ]
+              }
+            },
+            {
+              "id": "holst",
+              "name": {
+                "value": "Holst",
+                "synonyms": [
+                  "Gustav Holst"
+                ]
+              }
+            },
+            {
+              "id": "rachmaninoff",
+              "name": {
+                "value": "Rachmaninow",
+                "synonyms": [
+                  "Sergei Rachmaninow",
+                  "Rachmaninoff",
+                  "Sergej Rachmaninow",
+                  "Rachmaninov"
+                ]
+              }
+            },
+            {
+              "id": "purcell",
+              "name": {
+                "value": "Purcell",
+                "synonyms": [
+                  "Henry Purcell"
+                ]
+              }
+            },
+            {
+              "id": "monteverdi",
+              "name": {
+                "value": "Monteverdi",
+                "synonyms": [
+                  "Claudio Monteverdi"
+                ]
+              }
+            },
+            {
+              "id": "telemann",
+              "name": {
+                "value": "Telemann",
+                "synonyms": [
+                  "Georg Philipp Telemann"
+                ]
+              }
+            },
+            {
+              "id": "scarlatti",
+              "name": {
+                "value": "Scarlatti",
+                "synonyms": [
+                  "Domenico Scarlatti"
+                ]
+              }
+            },
+            {
+              "id": "corelli",
+              "name": {
+                "value": "Corelli",
+                "synonyms": [
+                  "Arcangelo Corelli"
+                ]
+              }
+            },
+            {
+              "id": "albinoni",
+              "name": {
+                "value": "Albinoni",
+                "synonyms": [
+                  "Tomaso Albinoni"
+                ]
+              }
+            },
+            {
+              "id": "gluck",
+              "name": {
+                "value": "Gluck",
+                "synonyms": [
+                  "Christoph Willibald Gluck"
+                ]
+              }
+            },
+            {
+              "id": "boccherini",
+              "name": {
+                "value": "Boccherini",
+                "synonyms": [
+                  "Luigi Boccherini"
+                ]
+              }
+            },
+            {
+              "id": "salieri",
+              "name": {
+                "value": "Salieri",
+                "synonyms": [
+                  "Antonio Salieri"
+                ]
+              }
+            },
+            {
+              "id": "paganini",
+              "name": {
+                "value": "Paganini",
+                "synonyms": [
+                  "Niccolo Paganini"
+                ]
+              }
+            },
+            {
+              "id": "weber",
+              "name": {
+                "value": "Weber",
+                "synonyms": [
+                  "Carl Maria von Weber"
+                ]
+              }
+            },
+            {
+              "id": "donizetti",
+              "name": {
+                "value": "Donizetti",
+                "synonyms": [
+                  "Gaetano Donizetti"
+                ]
+              }
+            },
+            {
+              "id": "bellini",
+              "name": {
+                "value": "Bellini",
+                "synonyms": [
+                  "Vincenzo Bellini"
+                ]
+              }
+            },
+            {
+              "id": "berlioz",
+              "name": {
+                "value": "Berlioz",
+                "synonyms": [
+                  "Hector Berlioz"
+                ]
+              }
+            },
+            {
+              "id": "gounod",
+              "name": {
+                "value": "Gounod",
+                "synonyms": [
+                  "Charles Gounod"
+                ]
+              }
+            },
+            {
+              "id": "borodin",
+              "name": {
+                "value": "Borodin",
+                "synonyms": [
+                  "Alexander Borodin"
+                ]
+              }
+            },
+            {
+              "id": "bruckner",
+              "name": {
+                "value": "Bruckner",
+                "synonyms": [
+                  "Anton Bruckner"
+                ]
+              }
+            },
+            {
+              "id": "delibes",
+              "name": {
+                "value": "Delibes",
+                "synonyms": [
+                  "Leo Delibes"
+                ]
+              }
+            },
+            {
+              "id": "massenet",
+              "name": {
+                "value": "Massenet",
+                "synonyms": [
+                  "Jules Massenet"
+                ]
+              }
+            },
+            {
+              "id": "faure",
+              "name": {
+                "value": "Faure",
+                "synonyms": [
+                  "Gabriel Faure"
+                ]
+              }
+            },
+            {
+              "id": "mahler",
+              "name": {
+                "value": "Mahler",
+                "synonyms": [
+                  "Gustav Mahler"
+                ]
+              }
+            },
+            {
+              "id": "puccini",
+              "name": {
+                "value": "Puccini",
+                "synonyms": [
+                  "Giacomo Puccini"
+                ]
+              }
+            },
+            {
+              "id": "richard_strauss",
+              "name": {
+                "value": "Richard Strauss",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "sibelius",
+              "name": {
+                "value": "Sibelius",
+                "synonyms": [
+                  "Jean Sibelius"
+                ]
+              }
+            },
+            {
+              "id": "janacek",
+              "name": {
+                "value": "Janacek",
+                "synonyms": [
+                  "Leos Janacek",
+                  "Janatschek"
+                ]
+              }
+            },
+            {
+              "id": "ravel",
+              "name": {
+                "value": "Ravel",
+                "synonyms": [
+                  "Maurice Ravel"
+                ]
+              }
+            },
+            {
+              "id": "stravinsky",
+              "name": {
+                "value": "Strawinsky",
+                "synonyms": [
+                  "Igor Strawinsky",
+                  "Stravinsky",
+                  "Strawinski"
+                ]
+              }
+            },
+            {
+              "id": "prokofiev",
+              "name": {
+                "value": "Prokofjew",
+                "synonyms": [
+                  "Sergei Prokofjew",
+                  "Prokofiev",
+                  "Prokofiew"
+                ]
+              }
+            },
+            {
+              "id": "shostakovich",
+              "name": {
+                "value": "Schostakowitsch",
+                "synonyms": [
+                  "Dmitri Schostakowitsch",
+                  "Shostakovich"
+                ]
+              }
+            },
+            {
+              "id": "bartok",
+              "name": {
+                "value": "Bartok",
+                "synonyms": [
+                  "Bela Bartok"
+                ]
+              }
+            },
+            {
+              "id": "gershwin",
+              "name": {
+                "value": "Gershwin",
+                "synonyms": [
+                  "George Gershwin"
+                ]
+              }
+            },
+            {
+              "id": "copland",
+              "name": {
+                "value": "Copland",
+                "synonyms": [
+                  "Aaron Copland"
+                ]
+              }
+            },
+            {
+              "id": "sousa",
+              "name": {
+                "value": "Sousa",
+                "synonyms": [
+                  "John Philip Sousa"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "dialog": {
+      "intents": [
+        {
+          "name": "PlayerCountIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "count",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": false,
+              "prompts": {}
+            }
+          ]
+        },
+        {
+          "name": "PlayerNameIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "name",
+              "type": "AMAZON.FirstName",
+              "confirmationRequired": false,
+              "elicitationRequired": false,
+              "prompts": {}
+            }
+          ]
+        },
+        {
+          "name": "AnswerIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "composer",
+              "type": "COMPOSER",
+              "confirmationRequired": false,
+              "elicitationRequired": false,
+              "prompts": {}
+            }
+          ]
+        }
+      ],
+      "delegationStrategy": "SKILL_RESPONSE"
+    },
+    "prompts": []
+  }
+}

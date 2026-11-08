@@ -3,7 +3,7 @@
 const Alexa = require('ask-sdk-core');
 const config = require('./config');
 const game = require('./game');
-const speech = require('./speech');
+const { forLocale } = require('./speech');
 const { getComposer, matchText, normalize, resolveSlot } = require('./composers');
 const SONGS = require('./data/songs.json');
 
@@ -11,6 +11,11 @@ const { PHASE } = game;
 const songById = new Map(SONGS.map((s) => [s.id, s]));
 
 // ======================================================================= helpers
+
+/** The speech module (English or German) for this request's locale. */
+function say(h) {
+  return forLocale(Alexa.getLocale(h.requestEnvelope));
+}
 
 function getState(h) {
   const attrs = h.attributesManager.getSessionAttributes();
@@ -40,17 +45,17 @@ const EXPECTED_SLOT = {
   [PHASE.PLAYING]: { intent: 'AnswerIntent', slot: 'composer' },
 };
 
-function defaultReprompt(state) {
+function defaultReprompt(h, state) {
   switch (state.phase) {
-    case PHASE.SETUP_COUNT: return speech.askPlayerCount();
-    case PHASE.SETUP_NAMES: return speech.askNameReprompt(game.namingIndex(state), state.playerCount);
-    case PHASE.PLAYING: return speech.guessReprompt(state);
-    default: return speech.playAgainReprompt();
+    case PHASE.SETUP_COUNT: return say(h).askPlayerCount();
+    case PHASE.SETUP_NAMES: return say(h).askNameReprompt(game.namingIndex(state), state.playerCount);
+    case PHASE.PLAYING: return say(h).guessReprompt(state);
+    default: return say(h).playAgainReprompt();
   }
 }
 
 /** Speak and keep the session open, waiting for the next answer. */
-function ask(h, state, text, reprompt = defaultReprompt(state)) {
+function ask(h, state, text, reprompt = defaultReprompt(h, state)) {
   saveState(h, state);
   const rb = h.responseBuilder.speak(text).reprompt(reprompt);
   const expected = EXPECTED_SLOT[state.phase];
@@ -81,103 +86,108 @@ function anyRawValue(h) {
   return slotValue(h, 'composer') || slotValue(h, 'name') || slotValue(h, 'count');
 }
 
-const COUNT_WORDS = {
-  one: 1, won: 1, solo: 1, me: 1, single: 1, alone: 1,
-  two: 2, to: 2, too: 2,
-  three: 3, tree: 3,
-  four: 4, for: 4, fore: 4,
-};
+// The words each language listens for (speech/<lang>.js "words"), normalized once.
+const wordCache = new Map();
 
-function parseCount(raw) {
+function wordsFor(s) {
+  if (!wordCache.has(s.lang)) {
+    const { counts, countSoundAlikes, commands, skipName } = s.words;
+    wordCache.set(s.lang, {
+      counts,
+      countSoundAlikes,
+      commands: Object.entries(commands).map(([cmd, phrases]) => [cmd, phrases.map(normalize)]),
+      skipName: new Set(skipName.map(normalize)),
+    });
+  }
+  return wordCache.get(s.lang);
+}
+
+function parseCount(raw, words) {
   const norm = normalize(raw);
   const digits = norm.match(/\b(\d+)\b/);
   if (digits) return Number(digits[1]);
-  for (const word of norm.split(' ')) {
-    if (COUNT_WORDS[word]) return COUNT_WORDS[word];
+  const list = norm.split(' ');
+  for (const table of [words.counts, words.countSoundAlikes]) {
+    const word = list.find((w) => Object.hasOwn(table, w));
+    if (word) return table[word];
   }
   return NaN;
 }
 
 // Words that mean something other than a composer when Alexa forces them into the
 // composer slot (which happens while that slot is being elicited).
-const COMMANDS = [
-  ['pass', ['pass', 'skip', 'skip me', 'no idea', "don't know", 'not sure', 'no clue', 'give up', 'next player', 'beats me']],
-  ['hint', ['hint', 'clue', 'help me out']],
-  ['repeat', ['repeat', 'again', 'replay', 'one more time']],
-  ['score', ['score', 'scores', 'who is winning', "who's winning"]],
-].map(([cmd, phrases]) => [cmd, phrases.map(normalize)]);
-
-function detectCommand(raw) {
+function detectCommand(raw, words) {
   const padded = ` ${normalize(raw)} `;
-  for (const [cmd, phrases] of COMMANDS) {
+  for (const [cmd, phrases] of words.commands) {
     if (phrases.some((p) => padded.includes(` ${p} `))) return cmd;
   }
   return null;
 }
 
 /** Work out what an answer means: a composer guess, a command, or nothing usable. */
-function interpretAnswer(slot) {
+function interpretAnswer(slot, words) {
   const { ids, raw } = resolveSlot(slot);
   if (ids.length) return { kind: 'guess', ids };
-  const cmd = detectCommand(raw);
+  const cmd = detectCommand(raw, words);
   if (cmd) return { kind: cmd };
   const fuzzy = matchText(raw);
   if (fuzzy.length) return { kind: 'guess', ids: fuzzy };
   return { kind: 'unknown' };
 }
 
-const SKIP_NAME = new Set(['skip', 'pass', 'no name', 'next', 'none', 'nothing']);
-
 // ======================================================================= game actions
 
 function welcome(h) {
   const state = game.createState();
-  return ask(h, state, speech.welcome(), speech.askPlayerCount());
+  return ask(h, state, say(h).welcome(), say(h).askPlayerCount());
 }
 
 function setCount(h, state, value) {
   if (!game.setPlayerCount(state, value, config)) {
-    return ask(h, state, speech.invalidPlayerCount());
+    return ask(h, state, say(h).invalidPlayerCount());
   }
-  return ask(h, state, speech.playerCountAccepted(state.playerCount));
+  return ask(h, state, say(h).playerCountAccepted(state.playerCount));
 }
 
 function addName(h, state, rawName) {
   const index = game.namingIndex(state);
   const raw = String(rawName || '').trim();
   let lead;
-  if (/^[\d\s?]*$/.test(raw)) return ask(h, state, speech.nameNotUnderstood(index, state.playerCount));
-  if (SKIP_NAME.has(normalize(raw))) {
-    game.addPlayer(state);
-    lead = speech.nameSkipped(index);
+  if (/^[\d\s?]*$/.test(raw)) return ask(h, state, say(h).nameNotUnderstood(index, state.playerCount));
+  if (wordsFor(say(h)).skipName.has(normalize(raw))) {
+    if (game.addPlayer(state, say(h).defaultName(index)) !== 'ok') game.addPlayer(state);
+    lead = say(h).nameSkipped(index);
   } else {
     // Keep names short; Alexa occasionally hears a whole sentence.
     const name = raw.split(/\s+/).slice(0, 2).join(' ');
     const result = game.addPlayer(state, name);
-    if (result === 'duplicate') return ask(h, state, speech.duplicateName(name, index));
-    if (result !== 'ok') return ask(h, state, speech.nameNotUnderstood(index, state.playerCount));
-    lead = speech.nameAccepted(state.players[index].name);
+    if (result === 'duplicate') {
+      const taken = state.players.find((p) => p.name.toLowerCase() === name.toLowerCase());
+      return ask(h, state, say(h).duplicateName(taken ? taken.name : name, index));
+    }
+    if (result !== 'ok') return ask(h, state, say(h).nameNotUnderstood(index, state.playerCount));
+    lead = say(h).nameAccepted(state.players[index].name);
   }
   if (game.allPlayersNamed(state)) return beginGame(h, state, lead);
-  return ask(h, state, `${lead} ${speech.askName(game.namingIndex(state), state.playerCount)}`);
+  return ask(h, state, `${lead} ${say(h).askName(game.namingIndex(state), state.playerCount)}`);
 }
 
 function skipName(h, state) {
-  return addName(h, state, 'skip');
+  return addName(h, state, say(h).words.skipName[0]);
 }
 
 function beginGame(h, state, lead = '') {
   game.startGame(state, SONGS, config);
-  const intro = speech.roundIntro(state, clipUrl(currentSong(state)));
-  return ask(h, state, `${lead} ${speech.rules(state)} ${intro}`.trim());
+  const intro = say(h).roundIntro(state, clipUrl(currentSong(state)));
+  return ask(h, state, `${lead} ${say(h).rules(state)} ${intro}`.trim());
 }
 
 /** Close the current round and either play the next clip or announce the results. */
 function finishRound(h, state, lead) {
   if (game.nextRound(state)) {
-    return ask(h, state, `${lead} ${speech.gameOver(state)}`);
+    return ask(h, state, `${lead} ${say(h).gameOver(state)}`);
   }
-  const intro = speech.roundIntro(state, clipUrl(currentSong(state)));
+  const intro = say(h).roundIntro(state, clipUrl(currentSong(state)));
   return ask(h, state, `${lead} <break time="700ms"/>${intro}`);
 }
 
@@ -187,13 +197,13 @@ function makeGuess(h, state, ids) {
   const outcome = game.guess(state, ids, song.composer, config);
   switch (outcome.result) {
     case 'correct':
-      return finishRound(h, state, speech.correct(state, outcome.playerIndex, song, answer));
+      return finishRound(h, state, say(h).correct(state, outcome.playerIndex, song, answer));
     case 'duplicate':
-      return ask(h, state, speech.duplicateGuess(state, getComposer(outcome.guessedId)));
+      return ask(h, state, say(h).duplicateGuess(state, getComposer(outcome.guessedId)));
     default: {
-      const lead = speech.wrong(state, outcome.playerIndex, getComposer(outcome.guessedId));
-      if (outcome.roundOver) return finishRound(h, state, `${lead} ${speech.nobodyGotIt(state, song, answer)}`);
-      return ask(h, state, `${lead} ${speech.askGuess(state)}`);
+      const lead = say(h).wrong(state, outcome.playerIndex, getComposer(outcome.guessedId));
+      if (outcome.roundOver) return finishRound(h, state, `${lead} ${say(h).nobodyGotIt(state, song, answer)}`);
+      return ask(h, state, `${lead} ${say(h).askGuess(state)}`);
     }
   }
 }
@@ -201,50 +211,50 @@ function makeGuess(h, state, ids) {
 function passTurn(h, state) {
   const song = currentSong(state);
   const outcome = game.pass(state, config);
-  const lead = speech.passed(state, outcome.playerIndex);
+  const lead = say(h).passed(state, outcome.playerIndex);
   if (outcome.roundOver) {
-    return finishRound(h, state, `${lead} ${speech.nobodyGotIt(state, song, getComposer(song.composer))}`);
+    return finishRound(h, state, `${lead} ${say(h).nobodyGotIt(state, song, getComposer(song.composer))}`);
   }
-  return ask(h, state, `${lead} ${speech.askGuess(state)}`);
+  return ask(h, state, `${lead} ${say(h).askGuess(state)}`);
 }
 
 function giveHint(h, state) {
   state.hints += 1;
-  if (state.hints > 2) return ask(h, state, speech.noMoreHints(state));
-  return ask(h, state, speech.hint(state, getComposer(currentSong(state).composer)));
+  if (state.hints > 2) return ask(h, state, say(h).noMoreHints(state));
+  return ask(h, state, say(h).hint(state, getComposer(currentSong(state).composer)));
 }
 
 function repeatClip(h, state) {
-  return ask(h, state, speech.repeatClip(state, clipUrl(currentSong(state))));
+  return ask(h, state, say(h).repeatClip(state, clipUrl(currentSong(state))));
 }
 
 function skipSong(h, state) {
   const song = currentSong(state);
-  return finishRound(h, state, speech.skipped(song, getComposer(song.composer)));
+  return finishRound(h, state, say(h).skipped(song, getComposer(song.composer)));
 }
 
 function reportScore(h, state) {
-  const follow = state.phase === PHASE.PLAYING ? speech.askGuess(state) : speech.playAgainReprompt();
-  return ask(h, state, `${speech.scoreReport(state)} ${follow}`);
+  const follow = state.phase === PHASE.PLAYING ? say(h).askGuess(state) : say(h).playAgainReprompt();
+  return ask(h, state, `${say(h).scoreReport(state)} ${follow}`);
 }
 
 function notUnderstood(h, state) {
   switch (state.phase) {
     case PHASE.SETUP_COUNT:
-      return ask(h, state, `Sorry, I didn't get that. ${speech.askPlayerCount()}`);
+      return ask(h, state, say(h).countNotUnderstood());
     case PHASE.SETUP_NAMES:
-      return ask(h, state, speech.nameNotUnderstood(game.namingIndex(state), state.playerCount));
+      return ask(h, state, say(h).nameNotUnderstood(game.namingIndex(state), state.playerCount));
     case PHASE.PLAYING:
       state.misses += 1;
-      return ask(h, state, speech.notUnderstood(state));
+      return ask(h, state, say(h).notUnderstood(state));
     default:
-      return ask(h, state, speech.playAgainReprompt());
+      return ask(h, state, say(h).playAgainReprompt());
   }
 }
 
 /** Handle an answer while a clip is being guessed. */
 function answerInGame(h, state, slot) {
-  const answer = interpretAnswer(slot);
+  const answer = interpretAnswer(slot, wordsFor(say(h)));
   switch (answer.kind) {
     case 'guess': return makeGuess(h, state, answer.ids);
     case 'pass': return passTurn(h, state);
@@ -269,7 +279,7 @@ function routeRawAnswer(h, state, slot) {
   }
   if (state.phase === PHASE.SETUP_NAMES) return raw ? addName(h, state, raw) : notUnderstood(h, state);
   if (state.phase === PHASE.PLAYING) return raw ? answerInGame(h, state, slot) : notUnderstood(h, state);
-  return ask(h, state, speech.playAgainReprompt());
+  return ask(h, state, say(h).playAgainReprompt());
 }
 
 // ======================================================================= handlers
@@ -328,7 +338,7 @@ const HintIntentHandler = {
   handle(h) {
     const state = getState(h);
     if (state.phase === PHASE.PLAYING) return giveHint(h, state);
-    return ask(h, state, `Hints are for when a clip is playing. ${defaultReprompt(state)}`);
+    return ask(h, state, say(h).hintsOnlyInGame(defaultReprompt(h, state)));
   },
 };
 
@@ -337,7 +347,7 @@ const ScoreIntentHandler = {
   handle(h) {
     const state = getState(h);
     if (state.phase === PHASE.PLAYING || state.phase === PHASE.GAME_OVER) return reportScore(h, state);
-    return ask(h, state, `The game hasn't started yet. ${defaultReprompt(state)}`);
+    return ask(h, state, say(h).notStartedYet(defaultReprompt(h, state)));
   },
 };
 
@@ -347,9 +357,9 @@ const RepeatIntentHandler = {
     const state = getState(h);
     if (state.phase === PHASE.PLAYING) return repeatClip(h, state);
     if (state.phase === PHASE.GAME_OVER) {
-      return ask(h, state, `${speech.finalResults(state)} ${speech.playAgainReprompt()}`);
+      return ask(h, state, `${say(h).finalResults(state)} ${say(h).playAgainReprompt()}`);
     }
-    return ask(h, state, defaultReprompt(state));
+    return ask(h, state, defaultReprompt(h, state));
   },
 };
 
@@ -367,7 +377,7 @@ const YesIntentHandler = {
   canHandle: (h) => isIntent(h, 'AMAZON.YesIntent'),
   handle(h) {
     const state = getState(h);
-    if (state.phase === PHASE.GAME_OVER) return beginGame(h, state, speech.newGameSamePlayers());
+    if (state.phase === PHASE.GAME_OVER) return beginGame(h, state, say(h).newGameSamePlayers());
     return notUnderstood(h, state);
   },
 };
@@ -376,7 +386,7 @@ const NoIntentHandler = {
   canHandle: (h) => isIntent(h, 'AMAZON.NoIntent'),
   handle(h) {
     const state = getState(h);
-    if (state.phase === PHASE.GAME_OVER) return tell(h, state, speech.goodbye());
+    if (state.phase === PHASE.GAME_OVER) return tell(h, state, say(h).goodbye());
     return notUnderstood(h, state);
   },
 };
@@ -385,7 +395,7 @@ const StartOverIntentHandler = {
   canHandle: (h) => isIntent(h, 'AMAZON.StartOverIntent'),
   handle(h) {
     const state = game.createState();
-    return ask(h, state, speech.startOver());
+    return ask(h, state, say(h).startOver());
   },
 };
 
@@ -393,7 +403,7 @@ const HelpIntentHandler = {
   canHandle: (h) => isIntent(h, 'AMAZON.HelpIntent'),
   handle(h) {
     const state = getState(h);
-    return ask(h, state, speech.help(state));
+    return ask(h, state, say(h).help(state));
   },
 };
 
@@ -401,7 +411,7 @@ const StopIntentHandler = {
   canHandle: (h) => isIntent(h, 'AMAZON.StopIntent', 'AMAZON.CancelIntent', 'AMAZON.NavigateHomeIntent'),
   handle(h) {
     const state = getState(h);
-    const text = state.phase === PHASE.PLAYING ? speech.stoppedMidGame(state) : speech.goodbye();
+    const text = state.phase === PHASE.PLAYING ? say(h).stoppedMidGame(state) : say(h).goodbye();
     return tell(h, state, text);
   },
 };
@@ -433,7 +443,7 @@ const ErrorHandler = {
   canHandle: () => true,
   handle(h, error) {
     console.error('Error handling request:', error && error.stack ? error.stack : error);
-    const text = 'Sorry, something went wrong on my side. Please try that again.';
+    const text = say(h).error();
     return h.responseBuilder.speak(text).reprompt(text).getResponse();
   },
 };
@@ -472,4 +482,4 @@ exports.handler = Alexa.SkillBuilders.custom()
   .lambda();
 
 // Exposed for unit tests.
-exports._internals = { detectCommand, interpretAnswer, parseCount };
+exports._internals = { detectCommand, interpretAnswer, parseCount, wordsFor };

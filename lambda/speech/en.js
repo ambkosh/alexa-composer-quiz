@@ -1,36 +1,30 @@
 'use strict';
 
-// Everything Alexa says lives here, so wording can be tweaked (or translated) in one place.
+// Everything Alexa says in English. de.js has the same functions in German; when you
+// change or add a function here, do the same there.
 // Functions return SSML fragments; index.js wraps them in <speak> via the ASK SDK.
 
-const config = require('./config');
-const game = require('./game');
+const config = require('../config');
+const game = require('../game');
+const { escape, pick, audio, sound, pause, firstLetter } = require('./common');
 
 const NUMBER_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
 
-function escape(text) {
-  return String(text)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-function pick(options, rng = Math.random) {
-  return options[Math.floor(rng() * options.length)];
-}
-
-function audio(url) {
-  return `<audio src="${escape(url)}"/>`;
-}
-
-function sound(name) {
-  return audio(config.sounds[name]);
-}
-
-function pause(ms) {
-  return `<break time="${ms}ms"/>`;
-}
+// Words index.js looks for in what the players said (normalized: lowercase, no accents).
+const words = {
+  // Player counts. Sound-alikes ("to", "for") only count when no real number word was heard.
+  counts: { one: 1, solo: 1, single: 1, alone: 1, two: 2, three: 3, four: 4 },
+  countSoundAlikes: { won: 1, me: 1, to: 2, too: 2, tree: 3, for: 4, fore: 4 },
+  // Commands that end up in the composer slot while it's being elicited.
+  commands: {
+    pass: ['pass', 'skip', 'skip me', 'no idea', "don't know", 'not sure', 'no clue', 'give up', 'next player', 'beats me'],
+    hint: ['hint', 'clue', 'help me out'],
+    repeat: ['repeat', 'again', 'replay', 'one more time'],
+    score: ['score', 'scores', 'who is winning', "who's winning"],
+  },
+  // Said instead of a name: use the default "Player N".
+  skipName: ['skip', 'pass', 'no name', 'next', 'none', 'nothing'],
+};
 
 function points(n) {
   return n === 1 ? 'one point' : `${n} points`;
@@ -64,6 +58,15 @@ function askPlayerCount() {
 
 function invalidPlayerCount() {
   return `I can host one to ${NUMBER_WORDS[config.maxPlayers]} players. How many players are there?`;
+}
+
+function countNotUnderstood() {
+  return `Sorry, I didn't get that. ${askPlayerCount()}`;
+}
+
+/** Name for a player who skipped giving one. */
+function defaultName(index) {
+  return `Player ${index + 1}`;
 }
 
 function playerCountAccepted(count) {
@@ -183,8 +186,8 @@ function noMoreHints(state) {
   return `That's all the hints I have for this one. ${askGuess(state)}`;
 }
 
-function firstLetter(text) {
-  return text.normalize('NFD').replace(/[̀-ͯ]/g, '').charAt(0).toUpperCase();
+function hintsOnlyInGame(reprompt) {
+  return `Hints are for when a clip is playing. ${reprompt}`;
 }
 
 function repeatClip(state, clipUrl) {
@@ -202,6 +205,10 @@ function scoreLine(state) {
   if (ranked.every((p) => p.score === 0)) return 'Nobody has scored yet.';
   if (ranked.length === 1) return `You have ${points(ranked[0].score)}.`;
   return `${listJoin(ranked.map((p) => `${name(p)} has ${points(p.score)}`))}.`;
+}
+
+function notStartedYet(reprompt) {
+  return `The game hasn't started yet. ${reprompt}`;
 }
 
 function scoreReport(state) {
@@ -278,10 +285,18 @@ function help(state) {
   }
 }
 
+function error() {
+  return 'Sorry, something went wrong on my side. Please try that again.';
+}
+
 module.exports = {
+  lang: 'en',
+  words,
   welcome,
   askPlayerCount,
   invalidPlayerCount,
+  countNotUnderstood,
+  defaultName,
   playerCountAccepted,
   askName,
   askNameReprompt,
@@ -301,8 +316,10 @@ module.exports = {
   notUnderstood,
   hint,
   noMoreHints,
+  hintsOnlyInGame,
   repeatClip,
   skipped,
+  notStartedYet,
   scoreReport,
   gameOver,
   finalResults,
@@ -312,4 +329,5 @@ module.exports = {
   stoppedMidGame,
   startOver,
   help,
+  error,
 };

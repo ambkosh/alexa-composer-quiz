@@ -7,78 +7,101 @@ const { execFileSync } = require('node:child_process');
 const { join } = require('node:path');
 
 const root = join(__dirname, '..');
-const model = require('../skill-package/interactionModels/custom/en-US.json');
 const manifest = require('../skill-package/skill.json');
 const COMPOSERS = require('../lambda/data/composers.json');
 const SONGS = require('../lambda/data/songs.json');
 
-const lm = model.interactionModel.languageModel;
+// Interaction model locale -> language of its slot values and samples.
+const LOCALES = { 'en-US': 'en', 'de-DE': 'de' };
+const models = Object.fromEntries(Object.keys(LOCALES).map((locale) => [
+  locale, require(`../skill-package/interactionModels/custom/${locale}.json`),
+]));
+const LETTERS = { en: "A-Za-z'", de: "A-Za-zäöüÄÖÜß'" };
 
-test('COMPOSER slot type is in sync with composers.json', async () => {
-  const { buildModel } = await import('../scripts/build-model.mjs');
-  assert.deepEqual(buildModel(model, COMPOSERS), model, 'run: npm run build:model');
-});
+for (const [locale, lang] of Object.entries(LOCALES)) {
+  const model = models[locale];
+  const lm = model.interactionModel.languageModel;
 
-test('invocation name is valid', () => {
-  assert.match(lm.invocationName, /^[a-z]+( [a-z]+)+$/);
-});
+  test(`${locale}: COMPOSER slot type is in sync with composers.json`, async () => {
+    const { buildModel } = await import('../scripts/build-model.mjs');
+    assert.deepEqual(buildModel(model, COMPOSERS, lang), model, 'run: npm run build:model');
+  });
 
-test('sample utterances are valid and unique', () => {
-  const seen = new Map();
-  for (const intent of lm.intents) {
-    const slotNames = new Set((intent.slots || []).map((s) => s.name));
-    for (const sample of intent.samples || []) {
-      assert.match(sample, /^[a-zA-Z' {}.]+$/, `${intent.name}: "${sample}" has invalid characters`);
-      for (const [, slot] of sample.matchAll(/\{(\w+)\}/g)) {
-        assert.ok(slotNames.has(slot), `${intent.name}: "${sample}" uses undeclared slot ${slot}`);
-      }
-      const key = sample.toLowerCase();
-      assert.ok(!seen.has(key), `"${sample}" is in both ${seen.get(key)} and ${intent.name}`);
-      seen.set(key, intent.name);
-    }
-  }
-});
+  test(`${locale}: invocation name is valid`, () => {
+    assert.match(lm.invocationName, /^[a-zäöüß]+( [a-zäöüß]+)+$/);
+  });
 
-test('required built-in intents are present', () => {
-  const names = new Set(lm.intents.map((i) => i.name));
-  for (const required of ['AMAZON.CancelIntent', 'AMAZON.HelpIntent', 'AMAZON.StopIntent', 'AMAZON.NavigateHomeIntent', 'AMAZON.FallbackIntent']) {
-    assert.ok(names.has(required), required);
-  }
-});
-
-test('dialog model matches the language model slots', () => {
-  for (const di of model.interactionModel.dialog.intents) {
-    const intent = lm.intents.find((i) => i.name === di.name);
-    assert.ok(intent, `dialog intent ${di.name} missing from language model`);
-    for (const slot of di.slots) {
-      const declared = intent.slots.find((s) => s.name === slot.name);
-      assert.ok(declared, `${di.name}.${slot.name}`);
-      assert.equal(declared.type, slot.type);
-    }
-  }
-  // index.js elicits these slots.
-  for (const [intent, slot] of [['PlayerCountIntent', 'count'], ['PlayerNameIntent', 'name'], ['AnswerIntent', 'composer']]) {
-    assert.ok(model.interactionModel.dialog.intents.some((d) => d.name === intent && d.slots.some((s) => s.name === slot)), intent);
-  }
-});
-
-test('slot values are plain words', () => {
-  for (const type of lm.types) {
-    for (const v of type.values) {
-      for (const word of [v.name.value, ...v.name.synonyms]) {
-        assert.match(word, /^[A-Za-z' .]+$/, `${type.name}: "${word}"`);
+  test(`${locale}: sample utterances are valid and unique`, () => {
+    const valid = new RegExp(`^[${LETTERS[lang]} {}.]+$`);
+    const seen = new Map();
+    for (const intent of lm.intents) {
+      const slotNames = new Set((intent.slots || []).map((s) => s.name));
+      for (const sample of intent.samples || []) {
+        assert.match(sample, valid, `${intent.name}: "${sample}" has invalid characters`);
+        for (const [, slot] of sample.matchAll(/\{(\w+)\}/g)) {
+          assert.ok(slotNames.has(slot), `${intent.name}: "${sample}" uses undeclared slot ${slot}`);
+        }
+        const key = sample.toLowerCase();
+        assert.ok(!seen.has(key), `"${sample}" is in both ${seen.get(key)} and ${intent.name}`);
+        seen.set(key, intent.name);
       }
     }
-  }
+  });
+
+  test(`${locale}: required built-in intents are present`, () => {
+    const names = new Set(lm.intents.map((i) => i.name));
+    for (const required of ['AMAZON.CancelIntent', 'AMAZON.HelpIntent', 'AMAZON.StopIntent', 'AMAZON.NavigateHomeIntent', 'AMAZON.FallbackIntent']) {
+      assert.ok(names.has(required), required);
+    }
+  });
+
+  test(`${locale}: dialog model matches the language model slots`, () => {
+    for (const di of model.interactionModel.dialog.intents) {
+      const intent = lm.intents.find((i) => i.name === di.name);
+      assert.ok(intent, `dialog intent ${di.name} missing from language model`);
+      for (const slot of di.slots) {
+        const declared = intent.slots.find((s) => s.name === slot.name);
+        assert.ok(declared, `${di.name}.${slot.name}`);
+        assert.equal(declared.type, slot.type);
+      }
+    }
+    // index.js elicits these slots.
+    for (const [intent, slot] of [['PlayerCountIntent', 'count'], ['PlayerNameIntent', 'name'], ['AnswerIntent', 'composer']]) {
+      assert.ok(model.interactionModel.dialog.intents.some((d) => d.name === intent && d.slots.some((s) => s.name === slot)), intent);
+    }
+  });
+
+  test(`${locale}: slot values are plain words`, () => {
+    const valid = new RegExp(`^[${LETTERS[lang]} .]+$`);
+    for (const type of lm.types) {
+      for (const v of type.values) {
+        for (const word of [v.name.value, ...v.name.synonyms]) {
+          assert.match(word, valid, `${type.name}: "${word}"`);
+        }
+      }
+    }
+  });
+
+  test(`${locale}: has a store listing whose example phrases use the invocation name`, () => {
+    const listing = manifest.manifest.publishingInformation.locales[locale];
+    assert.ok(listing, `skill.json has no ${locale} listing`);
+    for (const phrase of listing.examplePhrases) {
+      assert.ok(phrase.toLowerCase().includes(lm.invocationName), phrase);
+    }
+  });
+}
+
+test('every language model has the same intents and slots', () => {
+  const shape = (model) => model.interactionModel.languageModel.intents
+    .map((i) => `${i.name}(${(i.slots || []).map((s) => `${s.name}:${s.type}`).join(',')})`)
+    .sort();
+  const [first, ...rest] = Object.values(models);
+  for (const model of rest) assert.deepEqual(shape(model), shape(first));
 });
 
-test('manifest locales match the interaction models', () => {
-  const locales = Object.keys(manifest.manifest.publishingInformation.locales);
-  for (const locale of locales) {
+test('every manifest locale has an interaction model', () => {
+  for (const locale of Object.keys(manifest.manifest.publishingInformation.locales)) {
     assert.ok(existsSync(join(root, `skill-package/interactionModels/custom/${locale}.json`)), locale);
-  }
-  for (const phrase of manifest.manifest.publishingInformation.locales['en-US'].examplePhrases) {
-    assert.ok(phrase.toLowerCase().includes(lm.invocationName), phrase);
   }
 });
 
@@ -93,6 +116,15 @@ test('songs reference known composers and have unique ids', () => {
     assert.ok(song.title && song.source, song.id);
     assert.ok(song.start === 'loudest' || Number.isFinite(song.start), `${song.id}: start`);
     if (song.duration !== undefined) assert.ok(song.duration >= 10 && song.duration <= 60, `${song.id}: duration`);
+  }
+});
+
+test('German translations are complete', () => {
+  for (const c of COMPOSERS) {
+    assert.ok(c.de && c.de.origin && c.de.period, `${c.id}: missing de.origin / de.period`);
+  }
+  for (const s of SONGS) {
+    assert.ok(s.de && s.de.title, `${s.id}: missing de.title`);
   }
 });
 

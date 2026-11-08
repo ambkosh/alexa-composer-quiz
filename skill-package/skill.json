@@ -20,6 +20,25 @@
             "party game",
             "multiplayer"
           ]
+        },
+        "de-DE": {
+          "name": "Komponisten-Quiz",
+          "summary": "Ein Ratespiel rund um klassische Musik für bis zu vier Spieler.",
+          "description": "Das Komponisten-Quiz spielt kurze Ausschnitte bekannter klassischer Musik, und du und bis zu drei Freunde ratet abwechselnd, wer das Stück komponiert hat. In jeder Runde rät ein anderer Spieler zuerst; liegt er falsch, ist der Nächste dran. Jede richtige Antwort bringt einen Punkt, und wer am Ende die meisten Punkte hat, gewinnt.\n\nKeine Ahnung? Frag nach einem Tipp, sag \"nochmal\", um das Stück noch einmal zu hören, oder sag \"passe\". Mit \"wie ist der Punktestand?\" hörst du jederzeit den Spielstand.\n\nAlle Aufnahmen sind gemeinfrei oder CC0 und stammen von Wikimedia Commons.",
+          "examplePhrases": [
+            "Alexa, starte Komponisten Quiz",
+            "Alexa, starte Komponisten Quiz mit drei Spielern",
+            "Alexa, öffne Komponisten Quiz"
+          ],
+          "keywords": [
+            "klassische Musik",
+            "Komponist",
+            "Quiz",
+            "Musikquiz",
+            "Ratespiel",
+            "Partyspiel",
+            "Mehrspieler"
+          ]
         }
       },
       "isAvailableWorldwide": true,

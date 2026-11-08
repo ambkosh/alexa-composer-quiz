@@ -4,9 +4,10 @@ const COMPOSERS = require('./data/composers.json');
 
 const byId = new Map(COMPOSERS.map((c) => [c.id, c]));
 
-/** Lowercase, strip accents and punctuation, collapse whitespace. */
+/** Lowercase, strip accents and punctuation, collapse whitespace ("Weiß" -> "weiss"). */
 function normalize(text) {
   return String(text || '')
+    .replace(/ß/g, 'ss')
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
     .toLowerCase()
@@ -14,11 +15,12 @@ function normalize(text) {
     .trim();
 }
 
-// Every way of saying each composer, normalized: [{ id, phrase, words }]
+// Every way of saying each composer in any language, normalized: [{ id, phrase, words }]
 const PHRASES = [];
 for (const c of COMPOSERS) {
   const seen = new Set();
-  for (const p of [c.name, c.fullName, ...c.synonyms]) {
+  const de = c.de || {};
+  for (const p of [c.name, c.fullName, ...c.synonyms, de.name, de.fullName, ...(de.synonyms || [])]) {
     const phrase = normalize(p);
     if (!phrase || seen.has(phrase)) continue;
     seen.add(phrase);

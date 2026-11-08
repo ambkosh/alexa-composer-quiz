@@ -40,6 +40,33 @@ test('matchText finds composers in free text', () => {
   }
 });
 
+test('normalize turns ß into ss and drops umlauts', () => {
+  assert.equal(normalize('Weiß nicht'), 'weiss nicht');
+  assert.equal(normalize('Händel'), 'handel');
+});
+
+test('matchText understands German spellings', () => {
+  const cases = {
+    Tschaikowsky: ['tchaikovsky'],
+    tschaikowski: ['tchaikovsky'],
+    'Georg Friedrich Händel': ['handel'],
+    'johann strauß': ['strauss'],
+    'rimski korsakow': ['rimsky_korsakov'],
+    rachmaninow: ['rachmaninoff'],
+    mussorgski: ['mussorgsky'],
+    schostakowitsch: ['shostakovich'],
+    strawinsky: ['stravinsky'],
+    dworschak: ['dvorak'],
+    'ich glaube es ist mozart': ['mozart'],
+  };
+  for (const [text, expected] of Object.entries(cases)) {
+    assert.deepEqual(matchText(text), expected, text);
+  }
+  for (const text of ['keine ahnung', 'nochmal', 'hallo', 'punktestand']) {
+    assert.deepEqual(matchText(text), [], text);
+  }
+});
+
 test('matchText prefers the longest name and keeps ambiguity', () => {
   assert.deepEqual(matchText('richard strauss'), ['richard_strauss']);
   assert.deepEqual(matchText('johann strauss'), ['strauss']);

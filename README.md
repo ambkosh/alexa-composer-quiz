@@ -4,6 +4,9 @@ A guess-the-composer party game for one to four players. Alexa plays a short cli
 famous classical piece, and players take turns naming the composer. A correct answer
 earns a point; the player with the most points at the end wins.
 
+The skill speaks **English** (en-US, "Alexa, open composer quiz") and **German** (de-DE,
+"Alexa, starte Komponisten Quiz"). Alexa picks the language from the Echo's language setting.
+
 ```
 "Alexa, open composer quiz"
   How many players are there?          → "three"
@@ -30,6 +33,8 @@ earns a point; the player with the most points at the end wins.
 - **During a round you can say:** a composer's name ("Bach", "it's Tchaikovsky"), "pass",
   "hint" (nationality and era, then the first letter), "repeat", "skip this song",
   "what's the score", "help", or "stop".
+  In German: "Bach", "ich glaube Tschaikowsky", "passe", "Tipp", "nochmal", "nächstes Stück",
+  "wie ist der Punktestand", "Hilfe", "Stopp".
 - Alexa recognises 64 composers, so guesses like "Mahler" are accepted as (wrong) answers
   rather than misheard.
 
@@ -39,13 +44,14 @@ earns a point; the player with the most points at the end wins.
 lambda/                    skill code (Node.js, ASK SDK v2)
   index.js                 request handlers: routing by game phase
   game.js                  game rules (pure functions, no Alexa code)
-  speech.js                everything Alexa says
+  speech/en.js, speech/de.js  everything Alexa says, in English and German
+  speech/index.js          picks the language from the request locale
   composers.js             composer lookup + fuzzy matching of what Alexa heard
   config.js                settings: audio URL, rounds, sounds, …
-  data/composers.json      composers: names, synonyms, hint data
-  data/songs.json          the song catalog (piece, composer, source recording, clip start)
-skill-package/             skill manifest and interaction model (en-US)
-scripts/build-model.mjs    writes the COMPOSER slot type from composers.json
+  data/composers.json      composers: names, synonyms, hint data (German in the "de" fields)
+  data/songs.json          the song catalog (piece, composer, source recording, clip start, German title)
+skill-package/             skill manifest and interaction models (en-US, de-DE)
+scripts/build-model.mjs    writes the COMPOSER slot type of both models from composers.json
 scripts/build-clips.mjs    downloads source recordings and builds audio/*.mp3
 audio/                     the clips Alexa plays (+ clips.json with clip offsets/sources)
 CREDITS.md                 performer, license and source page of every recording
@@ -67,16 +73,22 @@ so **push the repo (including `audio/`) to GitHub first**, and keep it public.
 
 1. Open the [Alexa developer console](https://developer.amazon.com/alexa/console/ask) and
    click **Create Skill**.
-2. Name it "Composer Quiz", primary locale **English (US)**, type **Custom**, hosting
-   **Alexa-hosted (Node.js)**.
+2. Name it "Composer Quiz", primary locale **German (DE)** or **English (US)** (both are
+   imported either way), type **Custom**, hosting **Alexa-hosted (Node.js)**.
 3. On the template page choose **Import skill** and enter
    `https://github.com/ambkosh/alexa-composer-quiz.git`.
 4. When the import finishes, open the **Build** tab and click **Build skill** if the
-   model isn't built yet. Then open **Test**, set testing to **Development**, and type or say
-   "open composer quiz".
+   model isn't built yet (do this for each language, using the language menu at the top).
+   Then open **Test**, set testing to **Development**, pick the language, and type or say
+   "starte Komponisten Quiz" (German) or "open composer quiz" (English).
 
-To try it on an Echo, the device has to be registered to the same Amazon account and its
-language set to English (United States).
+To try it on an Echo, the device has to be registered to the same Amazon account. An Echo
+set to German gets the German version, one set to English (United States) the English one.
+
+The Alexa-hosted skill keeps its own copy of the code, so later changes on GitHub don't
+reach it by themselves: import the skill again, or copy the changed files into the
+console's **Code** tab and click **Deploy**. The clips are the exception, since they are
+always loaded from GitHub.
 
 ### Option B: ASK CLI with your own AWS account
 
@@ -107,6 +119,7 @@ Add or edit entries in `lambda/data/songs.json`:
 - `start` is where the clip starts, in seconds, or `"loudest"` to pick the loudest stretch
   (good for big finales such as the 1812 Overture). `duration` defaults to 25 seconds.
 - `title` is what Alexa says when revealing the answer ("That was *title* by *composer*").
+- `de.title` is the German title, with its article ("Das war *der Walkürenritt* von …").
 
 Then rebuild:
 
@@ -124,8 +137,11 @@ not start at the most recognisable part. Listen to `audio/*.mp3` and adjust `sta
 needed.
 
 New composers go in `lambda/data/composers.json` (name, synonyms Alexa might hear,
-nationality and era for hints). Run `npm run build:model` afterwards to update the
-interaction model, then rebuild the model in the developer console.
+nationality and era for hints). The `de` object holds the German version: `origin` and
+`period` for the hint ("Dieser Komponist kam aus *Russland*. Seine Musik stammt aus *der
+Romantik*."), plus `name`, `fullName` and `synonyms` where German spelling differs
+("Tschaikowsky"). Run `npm run build:model` afterwards to update both interaction models,
+then rebuild the models in the developer console.
 
 ## Development
 

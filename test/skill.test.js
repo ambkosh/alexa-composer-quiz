@@ -9,14 +9,17 @@ const assert = require('node:assert/strict');
 // Keep the skill's CloudWatch-style request logging out of the test output.
 console.log = () => {};
 
-const { handler } = require('../lambda/index');
+const { handler, _internals } = require('../lambda/index');
 const SONGS = require('../lambda/data/songs.json');
 const config = require('../lambda/config');
+const { forLocale } = require('../lambda/speech');
+const { getComposer } = require('../lambda/composers');
 
 const AUTHORITY = 'amzn1.er-authority.echo-sdk.amzn1.ask.skill.test.COMPOSER';
 
 class Session {
-  constructor() {
+  constructor(locale = 'en-US') {
+    this.locale = locale;
     this.attributes = {};
     this.isNew = true;
   }
@@ -39,7 +42,7 @@ class Session {
           apiEndpoint: 'https://api.amazonalexa.com',
         },
       },
-      request: { requestId: 'amzn1.echo-api.request.test', timestamp: new Date().toISOString(), locale: 'en-US', ...request },
+      request: { requestId: 'amzn1.echo-api.request.test', timestamp: new Date().toISOString(), locale: this.locale, ...request },
     };
     const result = await new Promise((resolve, reject) => {
       handler(envelope, {}, (err, res) => (err ? reject(err) : resolve(res)));
@@ -72,8 +75,12 @@ class Session {
 
   get game() { return this.attributes.game; }
 
+  get song() {
+    return SONGS.find((s) => s.id === this.game.queue[this.game.round - 1]);
+  }
+
   get answerId() {
-    return SONGS.find((s) => s.id === this.game.queue[this.game.round - 1]).composer;
+    return this.song.composer;
   }
 
   get wrongId() {
@@ -278,4 +285,101 @@ test('session end returns an empty response', async () => {
   const s = new Session();
   const res = await s.send({ type: 'SessionEndedRequest', reason: 'USER_INITIATED' });
   assert.equal(res.outputSpeech, undefined);
+});
+
+// ---------------------------------------------------------------- German (de-DE)
+
+test('German: setup, rounds, hints and commands', async () => {
+  const s = new Session('de-DE');
+  const hi = await s.launch();
+  assert.match(speech(hi), /Willkommen beim Komponisten-Quiz/);
+  assert.match(speech(hi), /Wie viele Spieler seid ihr/);
+  assert.match(speech(await s.count(6)), /eine bis vier Personen/);
+  assert.match(speech(await s.count(3)), /Super, drei Spieler! Spieler eins, wie heißt du\?/);
+
+  await s.name('Anna');
+  assert.match(speech(await s.name('anna')), /schon jemanden namens Anna/);
+  const skipped = await s.name('überspringen');
+  assert.match(speech(skipped), /du bist Spieler zwei/);
+  const start = await s.name('Cleo');
+  assert.deepEqual(s.game.players.map((p) => p.name), ['Anna', 'Spieler 2', 'Cleo']);
+  assert.match(speech(start), /Wir spielen 9 Runden/);
+  assert.match(speech(start), /Runde 1 von 9/);
+  assert.match(speech(start), /Anna, (wer|von wem)/);
+
+  // Round 1: Anna is wrong, Spieler 2 is right; the reveal uses the German title and name.
+  const wrongName = getComposer(s.wrongId).de.name || getComposer(s.wrongId).name;
+  const wrong = await s.answer('x', s.wrongId);
+  assert.match(speech(wrong), new RegExp(`Leider falsch, Anna, es ist nicht ${wrongName}`));
+  const song = s.song;
+  const composer = getComposer(song.composer);
+  const right = await s.answer('x', s.answerId);
+  assert.ok(speech(right).includes(`Das war ${song.de.title} von ${composer.de.fullName || composer.fullName}.`), speech(right));
+  assert.match(speech(right), /Spieler 2 bekommt einen Punkt und hat jetzt einen Punkt/);
+  assert.match(speech(right), /Runde 2 von 9/);
+
+  // Round 2: Spieler 2 starts. Hints, then commands that land in the composer slot.
+  assert.match(speech(await s.intent('HintIntent')), /Ein Tipp: Dieser Komponist kam aus .+\. Seine Musik stammt aus/);
+  assert.match(speech(await s.intent('HintIntent')), /beginnt mit <say-as interpret-as="spell-out">[A-Z]<\/say-as>/);
+  assert.match(speech(await s.intent('HintIntent')), /Mehr Tipps habe ich/);
+  assert.match(speech(await s.answer('keine ahnung')), /Okay, Spieler 2 passt/);
+  assert.match(speech(await s.answer('nochmal bitte')), /Hier ist es noch einmal/);
+  assert.match(speech(await s.answer('wie ist der punktestand')), /Nach 1 von 9 Runden: Spieler 2 hat einen Punkt/);
+  assert.match(speech(await s.intent('AMAZON.HelpIntent')), /sag einfach den Namen des Komponisten/);
+
+  // A German spelling without entity resolution is still understood.
+  const guess = await s.answer('tschaikowski');
+  assert.match(speech(guess), /Tschaikowsky/);
+
+  let res;
+  while (s.game.phase === 'PLAYING') res = await s.answer('x', s.answerId);
+  assert.match(speech(res), /Das Spiel ist zu Ende!/);
+  assert.match(speech(res), /Endstand:/);
+  assert.match(speech(res), /Wollt ihr noch einmal spielen\?/);
+  assert.match(speech(await s.intent('AMAZON.YesIntent')), /Super, ein neues Spiel mit denselben Spielern/);
+  const bye = await s.intent('AMAZON.StopIntent');
+  assert.equal(bye.shouldEndSession, true);
+  assert.match(speech(bye), /Tschüss/);
+});
+
+test('German: solo game', async () => {
+  const s = new Session('de-DE');
+  await s.launch();
+  assert.match(speech(await s.count(1)), /Ein Solospiel, super! Wie heißt du\?/);
+  const start = await s.name('Kim');
+  assert.match(speech(start), /Du hast zwei Versuche pro Stück/);
+  assert.match(speech(await s.answer('blorp')), /das habe ich nicht verstanden/);
+  assert.match(speech(await s.answer('x', s.answerId)), /Du hast jetzt einen Punkt/);
+  let res;
+  while (s.game.phase === 'PLAYING') res = await s.intent('PassIntent');
+  assert.match(speech(res), /Du hast 1 von 8 richtig/);
+  assert.match(speech(res), /Willst du noch einmal spielen\?/);
+  assert.match(speech(await s.intent('AMAZON.NoIntent')), /Danke fürs Spielen/);
+});
+
+test('other locales fall back to English', async () => {
+  const s = new Session('fr-FR');
+  assert.match(speech(await s.launch()), /Welcome to Composer Quiz/);
+});
+
+test('player counts in words, per language', () => {
+  const { parseCount, wordsFor } = _internals;
+  const en = wordsFor(forLocale('en-US'));
+  const de = wordsFor(forLocale('de-DE'));
+  assert.equal(parseCount('3', en), 3);
+  assert.equal(parseCount('three', en), 3);
+  assert.equal(parseCount('for two players', en), 2, 'a real number word beats a sound-alike');
+  assert.equal(parseCount('for', en), 4);
+  assert.equal(parseCount('wir sind zu dritt', de), 3);
+  assert.equal(parseCount('zwei spieler', de), 2);
+  assert.equal(parseCount('ich spiele allein', de), 1);
+  assert.ok(Number.isNaN(parseCount('hallo', de)));
+});
+
+test('German speech has the same functions as English', () => {
+  const en = forLocale('en-US');
+  const de = forLocale('de-DE');
+  assert.deepEqual(Object.keys(de).sort(), Object.keys(en).sort());
+  assert.deepEqual(Object.keys(de.words).sort(), Object.keys(en.words).sort());
+  assert.deepEqual(Object.keys(de.words.commands).sort(), Object.keys(en.words.commands).sort());
 });
